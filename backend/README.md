@@ -110,8 +110,8 @@ npm start
 |---|---|---|
 | **Compute** | Direct Lambda handler invocation & local adapter | AWS Lambda (Node.js 20.x runtime) |
 | **API Edge** | Local request dispatcher | Amazon API Gateway (REST API with CORS) |
-| **Persistence** | `InMemoryReportRepository` (`Map<string, Report>`) | Amazon DynamoDB (`CampusSOS-Reports` table) |
-| **AI Triage** | `MockAnalysisService` (rule-based deterministic) | Amazon Bedrock (Amazon Nova / Titan models) |
+| **Persistence** | `DynamoDBReportRepository` (or `InMemoryReportRepository`) | Amazon DynamoDB (`CampusSOS-Reports` table) |
+| **AI Triage** | `BedrockAnalysisService` (or `MockAnalysisService`) | Amazon Bedrock (Amazon Nova / Anthropic models) |
 | **Cloud Deployment**| Not deployed; zero cloud resources created | AWS CloudFormation / SAM / CDK (Phase 10) |
 
 > **Notice on In-Memory Persistence**:  

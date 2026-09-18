@@ -86,7 +86,7 @@ export class DynamoDbReportRepository implements ReportRepository {
         ExclusiveStartKey: lastEvaluatedKey,
       });
 
-      const response = await this.docClient.send(command);
+      const response: any = await this.docClient.send(command);
       if (response.Items) {
         items = items.concat(response.Items as Report[]);
       }

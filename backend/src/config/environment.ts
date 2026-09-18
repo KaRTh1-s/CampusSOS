@@ -10,6 +10,8 @@ export interface AppConfig {
   tableName: string;
   corsOrigin: string;
   isOffline: boolean;
+  analysisMode: string;
+  bedrockModelId: string;
 }
 
 export const config: AppConfig = {
@@ -19,4 +21,6 @@ export const config: AppConfig = {
   // In production deployment (Phase 10), this will be configured with the deployed AWS Amplify URL.
   corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   isOffline: process.env.IS_OFFLINE === 'true' || !process.env.AWS_LAMBDA_FUNCTION_NAME,
+  analysisMode: process.env.ANALYSIS_MODE || 'mock',
+  bedrockModelId: process.env.BEDROCK_MODEL_ID || 'global.anthropic.claude-fable-5-1',
 };

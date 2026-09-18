@@ -93,8 +93,8 @@ AWS Lambda Handlers (analyze.ts, createReport.ts, listReports.ts, getReport.ts, 
        v
 Service Layer
  ├── AnalysisService
- │     ├── MockAnalysisService       <-- [Current Implementation - Part 4]
- │     └── BedrockAnalysisService    <-- [Future AWS Implementation - Phase 6]
+ │     ├── MockAnalysisService       <-- [Local Dev Implementation - Part 4]
+ │     └── BedrockAnalysisService    <-- [Current AWS Implementation - Part 6]
  └── ReportService
        ↓
   ReportRepository
