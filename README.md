@@ -12,14 +12,18 @@
 | **Phase 1** | Foundation, Architecture & Technical Specs | **COMPLETED (Part 1)** |
 | **Phase 2** | Frontend Shell & Complete Student MVP UI | **COMPLETED (Part 2 - Local)** |
 | **Phase 3** | Student Reporting Workflow Integration | **COMPLETED (Part 2 - Local Mock)** |
-| **Phase 4–6**| Backend API, DynamoDB & Bedrock Integration | *PLANNED* |
+| **Phase 4** | Backend Lambda API & Handlers | **COMPLETED (Part 3 - Local)** |
+| **Phase 5–6**| DynamoDB & Amazon Bedrock Integration | *PLANNED* |
 | **Phase 7–9**| Admin Dashboard, Security & Optional S3 | *PLANNED* |
 | **Phase 10–14**| AWS Deployment, E2E Testing & Demo Video | *PLANNED* |
 
 > **Current Implementation Note**:  
-> **PART 1**: Foundation complete.  
-> **PART 2**: Frontend MVP implemented locally.  
-> The AI analysis is currently mocked locally and will be connected to Amazon Bedrock in a later phase. No AWS cloud resources have been deployed yet.
+> - **PART 1**: Foundation and architecture complete.  
+> - **PART 2**: Student frontend MVP implemented locally.  
+> - **PART 3**: Backend Lambda-compatible API implemented locally.  
+> - AWS deployment has **NOT** happened yet (zero cloud costs incurred).  
+> - Amazon DynamoDB has **NOT** been connected yet (in-memory repository used for local testing).  
+> - Amazon Bedrock has **NOT** been connected yet (mock analysis service used for local testing).
 
 ---
 

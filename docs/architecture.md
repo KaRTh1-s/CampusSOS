@@ -79,12 +79,40 @@ flowchart TD
 
 - **Runtime**: Node.js 20.x on AWS Lambda (Serverless).
 - **Execution Model**: Event-driven micro-handlers matching API Gateway routes.
-- **Key Modules**:
-  1. `analyzeHandler`: Accepts the student's natural language text, validates bounds (10 to 2000 chars), formats a strict system prompt, invokes Amazon Bedrock, and parses the structured JSON output.
-  2. `createReportHandler`: Generates a collision-resistant UUID v4 `reportId`, adds ISO-8601 timestamps, sets initial status to `OPEN`, and persists to DynamoDB.
-  3. `listReportsHandler`: Supports filtering by `status` via DynamoDB Global Secondary Index (`status-createdAt-index`) and returns a paginated report list for administrators.
-  4. `getReportByIdHandler`: Fetches complete detail for a single report.
-  5. `updateReportStatusHandler`: Validates allowed status transitions (`OPEN` -> `IN_PROGRESS` -> `RESOLVED`) and updates the item with `updatedAt` audit timestamp.
+- **Layered Architecture & Separation of Concerns**:
+
+```
+Frontend (React SPA)
+       |
+       v (HTTPS)
+API Gateway (REST API / CORS)  <-- [Future Phase 10]
+       |
+       v
+AWS Lambda Handlers (analyze.ts, createReport.ts, listReports.ts, getReport.ts, updateReportStatus.ts)
+       |
+       v
+Service Layer
+ ├── AnalysisService
+ │     ├── MockAnalysisService       <-- [Current Implementation - Part 3]
+ │     └── BedrockAnalysisService    <-- [Future AWS Implementation - Phase 6]
+ └── ReportService
+       ↓
+  ReportRepository
+       ├── InMemoryReportRepository  <-- [Current Implementation - Part 3]
+       └── DynamoDBReportRepository  <-- [Future AWS Implementation - Phase 5]
+```
+
+### Key Modules Implemented (Part 3):
+1. `analyze.ts`: Accepts natural language text, validates bounds (10–2000 chars), invokes `AnalysisService`, and returns structured JSON output.
+2. `createReport.ts`: Validates all required fields, generates collision-resistant `CS-2026-XXXX` report ID, sets initial status to `OPEN`, and persists via `ReportService`.
+3. `listReports.ts`: Supports filtering by `status` and `priority`, returning sorted incident lists.
+4. `getReport.ts`: Point lookup for a single report by ID. Returns 404 if not found.
+5. `updateReportStatus.ts`: Validates status transitions (`OPEN` -> `IN_PROGRESS` -> `RESOLVED`), updates `updatedAt` timestamp, and prevents invalid backward transitions (e.g. `RESOLVED` -> `OPEN`).
+
+### Prompt Injection & Untrusted Data Boundary:
+- The backend treats all student inputs as **untrusted data**.
+- The AI layer is architected such that user text is injected strictly within isolated data markers (e.g. `<student_report>...</student_report>`).
+- User input is never evaluated as code, and system safety constraints cannot be overridden by text inside the report description.
 
 ---
 

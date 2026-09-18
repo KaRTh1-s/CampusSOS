@@ -1,0 +1,20 @@
+{
+  "name": "campussos-backend",
+  "version": "0.1.0",
+  "description": "AWS Lambda-compatible serverless backend for CampusSOS",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npx tsx tests/backend.test.ts",
+    "start": "npx tsx src/localDevServer.ts"
+  },
+  "dependencies": {
+    "@types/aws-lambda": "^8.10.147"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}
