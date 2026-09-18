@@ -82,24 +82,24 @@ flowchart TD
 - **Layered Architecture & Separation of Concerns**:
 
 ```
-Frontend (React SPA)
+Frontend (React 18 + Vite SPA)
        |
-       v (HTTPS)
-API Gateway (REST API / CORS)  <-- [Future Phase 10]
-       |
+       | [Live HTTP Requests - Part 4 Integrated]
        v
+Local HTTP Server (localDevServer.ts)  --> [Future Phase 10: Amazon API Gateway]
+       |
 AWS Lambda Handlers (analyze.ts, createReport.ts, listReports.ts, getReport.ts, updateReportStatus.ts)
        |
        v
 Service Layer
  ├── AnalysisService
- │     ├── MockAnalysisService       <-- [Current Implementation - Part 3]
+ │     ├── MockAnalysisService       <-- [Current Implementation - Part 4]
  │     └── BedrockAnalysisService    <-- [Future AWS Implementation - Phase 6]
  └── ReportService
        ↓
   ReportRepository
-       ├── InMemoryReportRepository  <-- [Current Implementation - Part 3]
-       └── DynamoDBReportRepository  <-- [Future AWS Implementation - Phase 5]
+       ├── InMemoryReportRepository  <-- [Local Dev Implementation - Part 4]
+       └── DynamoDBReportRepository  <-- [Current AWS Implementation - Part 5]
 ```
 
 ### Key Modules Implemented (Part 3):

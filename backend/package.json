@@ -6,10 +6,15 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "npx tsx tests/backend.test.ts",
+    "test:unit": "npx tsx tests/backend.test.ts",
+    "test:integration": "npx tsx tests/integration.test.ts",
+    "test:dynamo": "npx tsx tests/dynamoDbIntegration.test.ts",
+    "test": "npx tsx tests/backend.test.ts && npx tsx tests/integration.test.ts",
     "start": "npx tsx src/localDevServer.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1135.0",
+    "@aws-sdk/lib-dynamodb": "^3.1135.0",
     "@types/aws-lambda": "^8.10.147"
   },
   "devDependencies": {

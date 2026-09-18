@@ -15,8 +15,8 @@ export interface AppConfig {
 export const config: AppConfig = {
   awsRegion: process.env.AWS_REGION || 'ap-south-1',
   tableName: process.env.DYNAMODB_TABLE_NAME || 'CampusSOS-Reports',
-  // In development, allow all origins. In production deployment (Phase 10),
-  // this will be restricted to the deployed AWS Amplify frontend URL.
-  corsOrigin: process.env.CORS_ORIGIN || '*',
+  // In local development, explicitly permit the local Vite frontend origin.
+  // In production deployment (Phase 10), this will be configured with the deployed AWS Amplify URL.
+  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:5173',
   isOffline: process.env.IS_OFFLINE === 'true' || !process.env.AWS_LAMBDA_FUNCTION_NAME,
 };

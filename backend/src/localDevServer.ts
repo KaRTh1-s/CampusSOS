@@ -14,6 +14,7 @@ import { handler as createReportHandler } from './handlers/createReport.js';
 import { handler as listReportsHandler } from './handlers/listReports.js';
 import { handler as getReportHandler } from './handlers/getReport.js';
 import { handler as updateReportStatusHandler } from './handlers/updateReportStatus.js';
+import { config } from './config/environment.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 
@@ -62,9 +63,9 @@ const server = http.createServer(async (req, res) => {
   // Handle CORS preflight OPTIONS
   if (method === 'OPTIONS') {
     res.writeHead(200, {
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': config.corsOrigin,
       'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+      'Access-Control-Allow-Headers': 'Content-Type,Authorization,X-Requested-With',
     });
     res.end();
     return;

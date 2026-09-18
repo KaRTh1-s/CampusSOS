@@ -21,6 +21,7 @@ export interface Report {
   department: string;
   status: ReportStatus;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface IssueInput {

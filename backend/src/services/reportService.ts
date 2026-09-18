@@ -1,11 +1,12 @@
 import { CreateReportInput, Report, ReportFilters, ReportStatus } from '../types/index.js';
 import { ReportRepository } from '../repositories/reportRepository.js';
 import { defaultReportRepository } from '../repositories/inMemoryReportRepository.js';
+import { DynamoDbReportRepository } from '../repositories/dynamoDbReportRepository.js';
 import { generateReportId } from '../utils/reportId.js';
 import { validateStatusTransition } from '../utils/validation.js';
 
 export class ReportService {
-  constructor(private readonly repository: ReportRepository = defaultReportRepository) {}
+  constructor(private readonly repository: ReportRepository) {}
 
   /**
    * Creates and persists a new incident report
@@ -90,5 +91,15 @@ export class ReportService {
   }
 }
 
+// Select persistence mode based on environment variables
+const persistenceMode = process.env.PERSISTENCE_MODE || 'in-memory';
+let activeRepository: ReportRepository;
+
+if (persistenceMode === 'dynamodb') {
+  activeRepository = new DynamoDbReportRepository();
+} else {
+  activeRepository = defaultReportRepository;
+}
+
 // Singleton default instance
-export const defaultReportService = new ReportService();
+export const defaultReportService = new ReportService(activeRepository);
