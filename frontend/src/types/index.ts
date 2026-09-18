@@ -2,6 +2,13 @@ export type Priority = 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
 
 export type ReportStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED';
 
+export interface EvidenceMetadata {
+  objectKey: string;
+  contentType: string;
+  size: number;
+  uploadedAt: string;
+}
+
 export interface AnalysisResult {
   category: string;
   priority: Priority;
@@ -22,6 +29,7 @@ export interface Report {
   status: ReportStatus;
   createdAt: string;
   updatedAt?: string;
+  evidence?: EvidenceMetadata;
 }
 
 export interface IssueInput {

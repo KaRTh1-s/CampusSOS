@@ -6,6 +6,8 @@ interface ReportContextType {
   setDescription: (val: string) => void;
   location: string;
   setLocation: (val: string) => void;
+  evidenceFile: File | null;
+  setEvidenceFile: (val: File | null) => void;
   isAnalyzing: boolean;
   setIsAnalyzing: (val: boolean) => void;
   analysisResult: AnalysisResult | null;
@@ -24,6 +26,7 @@ const ReportContext = createContext<ReportContextType | undefined>(undefined);
 export const ReportProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [description, setDescription] = useState<string>('');
   const [location, setLocation] = useState<string>('');
+  const [evidenceFile, setEvidenceFile] = useState<File | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
   const [latestReport, setLatestReport] = useState<Report | null>(null);
@@ -33,6 +36,7 @@ export const ReportProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const resetReportFlow = () => {
     setDescription('');
     setLocation('');
+    setEvidenceFile(null);
     setIsAnalyzing(false);
     setAnalysisResult(null);
     setLatestReport(null);
@@ -47,6 +51,8 @@ export const ReportProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setDescription,
         location,
         setLocation,
+        evidenceFile,
+        setEvidenceFile,
         isAnalyzing,
         setIsAnalyzing,
         analysisResult,

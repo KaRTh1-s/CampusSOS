@@ -11,6 +11,7 @@ export const AnalysisPage: React.FC = () => {
   const {
     description,
     location,
+    evidenceFile,
     analysisResult,
     setLatestReport,
     isSubmitting,
@@ -39,15 +40,18 @@ export const AnalysisPage: React.FC = () => {
     setError(null);
 
     try {
-      const created = await createReport({
-        description,
-        location: location.trim() || undefined,
-        category,
-        priority,
-        summary,
-        recommendedAction,
-        department,
-      });
+      const created = await createReport(
+        {
+          description,
+          location: location.trim() || undefined,
+          category,
+          priority,
+          summary,
+          recommendedAction,
+          department,
+        },
+        evidenceFile || undefined
+      );
 
       setLatestReport(created);
       navigate('/confirmation');

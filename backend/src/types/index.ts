@@ -10,6 +10,13 @@ export interface AnalysisResult {
   department: string;
 }
 
+export interface EvidenceMetadata {
+  objectKey: string;
+  contentType: string;
+  size: number;
+  uploadedAt: string;
+}
+
 export interface Report {
   reportId: string;
   description: string;
@@ -22,6 +29,7 @@ export interface Report {
   status: ReportStatus;
   createdAt: string;
   updatedAt: string;
+  evidence?: EvidenceMetadata;
 }
 
 export interface AnalyzeRequestInput {
@@ -37,6 +45,7 @@ export interface CreateReportInput {
   summary: string;
   recommendedAction: string;
   department: string;
+  evidence?: EvidenceMetadata;
 }
 
 export interface UpdateReportStatusInput {

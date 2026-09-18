@@ -12,6 +12,7 @@ export interface AppConfig {
   isOffline: boolean;
   analysisMode: string;
   bedrockModelId: string;
+  s3EvidenceBucket: string;
 }
 
 export const config: AppConfig = {
@@ -23,4 +24,5 @@ export const config: AppConfig = {
   isOffline: process.env.IS_OFFLINE === 'true' || !process.env.AWS_LAMBDA_FUNCTION_NAME,
   analysisMode: process.env.ANALYSIS_MODE || 'mock',
   bedrockModelId: process.env.BEDROCK_MODEL_ID || 'global.anthropic.claude-fable-5-1',
+  s3EvidenceBucket: process.env.S3_EVIDENCE_BUCKET || 'campussos-evidence-ap-south-1',
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useReport } from '../context/ReportContext';
 import { analyzeIssue } from '../services/api';
@@ -6,6 +6,9 @@ import { validateDescription, validateLocation, MAX_DESCRIPTION_LENGTH } from '.
 import { LoadingOverlay } from '../components/LoadingOverlay';
 import { ErrorBanner } from '../components/ErrorBanner';
 import { SparklesIcon, MapPinIcon, InfoIcon } from '../components/Icons';
+
+const MAX_EVIDENCE_SIZE = 5 * 1024 * 1024; // 5 MB
+const ALLOWED_EVIDENCE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 const QUICK_PROMPTS = [
   {
@@ -37,6 +40,8 @@ export const ReportIssuePage: React.FC = () => {
     setDescription,
     location,
     setLocation,
+    evidenceFile,
+    setEvidenceFile,
     isAnalyzing,
     setIsAnalyzing,
     setAnalysisResult,
@@ -45,6 +50,51 @@ export const ReportIssuePage: React.FC = () => {
   } = useReport();
 
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [evidenceError, setEvidenceError] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Revoke object URL on unmount or when file changes (prevents memory leak)
+  useEffect(() => {
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
+  }, [previewUrl]);
+
+  const handleEvidenceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setEvidenceError(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+    if (!file) {
+      setEvidenceFile(null);
+      return;
+    }
+    if (!ALLOWED_EVIDENCE_TYPES.includes(file.type)) {
+      setEvidenceError('Only JPEG, PNG, and WebP images are accepted.');
+      setEvidenceFile(null);
+      return;
+    }
+    if (file.size > MAX_EVIDENCE_SIZE) {
+      setEvidenceError(`File is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum is 5 MB.`);
+      setEvidenceFile(null);
+      return;
+    }
+    setEvidenceFile(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  };
+
+  const handleRemoveEvidence = () => {
+    setEvidenceFile(null);
+    setEvidenceError(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
@@ -194,6 +244,59 @@ export const ReportIssuePage: React.FC = () => {
                   disabled={isAnalyzing}
                 />
               </div>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="issue-evidence" className="form-label">
+                <span>Evidence Photo</span>
+                <span className="form-optional-tag">Optional — attach a photo of the issue</span>
+              </label>
+
+              <input
+                id="issue-evidence"
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={handleEvidenceChange}
+                disabled={isAnalyzing}
+                style={{ display: 'none' }}
+              />
+              {!evidenceFile && (
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isAnalyzing}
+                  style={{ width: '100%' }}
+                >
+                  Choose Image (JPEG, PNG, WebP — max 5 MB)
+                </button>
+              )}
+              {evidenceError && <p style={{ color: 'var(--priority-critical-border)', marginTop: '0.5rem', fontSize: '0.9rem' }}>{evidenceError}</p>}
+              {evidenceFile && previewUrl && (
+                <div style={{ marginTop: '0.75rem', display: 'flex', alignItems: 'flex-start', gap: '1rem', padding: '1rem', border: '1px solid var(--border-color, #e2e8f0)', borderRadius: '8px', background: 'var(--bg-color, #f7fafc)' }}>
+                  <img
+                    src={previewUrl}
+                    alt="Evidence preview"
+                    style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--border-color, #e2e8f0)' }}
+                  />
+                  <div style={{ flex: 1 }}>
+                    <p style={{ margin: 0, fontWeight: 600, fontSize: '0.9rem' }}>{evidenceFile.name}</p>
+                    <p style={{ margin: '0.25rem 0 0', color: 'var(--text-muted, #718096)', fontSize: '0.85rem' }}>
+                      {(evidenceFile.size / 1024).toFixed(1)} KB • {evidenceFile.type.split('/')[1].toUpperCase()}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={handleRemoveEvidence}
+                    aria-label="Remove evidence"
+                    style={{ padding: '0.25rem 0.75rem', fontSize: '0.85rem' }}
+                  >
+                    Remove
+                  </button>
+                </div>
+              )}
             </div>
 
             <div style={{ marginTop: '2rem' }}>

@@ -35,6 +35,87 @@ export function parseRequestBody(raw: string | null | undefined): {
   }
 }
 
+export interface MultipartField {
+  name: string;
+  value: string;
+}
+
+export interface MultipartFile {
+  name: string;
+  filename: string;
+  contentType: string;
+  data: Buffer;
+  size: number;
+}
+
+export interface ParsedMultipart {
+  fields: Record<string, string>;
+  file: MultipartFile | null;
+}
+
+/**
+ * Lightweight multipart/form-data parser for Node.js native HTTP.
+ * Handles a single file field alongside text fields.
+ * Does NOT use third-party libraries.
+ */
+export function parseMultipartBody(body: Buffer, boundary: string): ParsedMultipart | null {
+  try {
+    const delimiter = Buffer.from(`--${boundary}`);
+    const fields: Record<string, string> = {};
+    let file: MultipartFile | null = null;
+
+    // Split on boundary
+    const parts: Buffer[] = [];
+    let start = 0;
+    let searchStart = 0;
+    while (searchStart < body.length) {
+      const idx = body.indexOf(delimiter, searchStart);
+      if (idx === -1) break;
+      if (start > 0) {
+        // Extract part between previous boundary end and this boundary
+        const part = body.slice(start, idx - 2); // strip trailing CRLF
+        if (part.length > 0) parts.push(part);
+      }
+      start = idx + delimiter.length + 2; // skip boundary + CRLF
+      searchStart = idx + delimiter.length;
+    }
+
+    for (const part of parts) {
+      // Find header/body separator (double CRLF)
+      const separatorIdx = part.indexOf(Buffer.from('\r\n\r\n'));
+      if (separatorIdx === -1) continue;
+
+      const headerSection = part.slice(0, separatorIdx).toString('utf-8');
+      const partBody = part.slice(separatorIdx + 4);
+
+      const dispositionMatch = headerSection.match(/Content-Disposition:[^\r\n]*name="([^"]+)"/i);
+      if (!dispositionMatch) continue;
+      const fieldName = dispositionMatch[1];
+
+      const filenameMatch = headerSection.match(/filename="([^"]+)"/i);
+      const contentTypeMatch = headerSection.match(/Content-Type:\s*([^\r\n]+)/i);
+
+      if (filenameMatch && contentTypeMatch) {
+        // This is a file field
+        file = {
+          name: fieldName,
+          filename: filenameMatch[1],
+          contentType: contentTypeMatch[1].trim(),
+          data: partBody,
+          size: partBody.length,
+        };
+      } else {
+        // Regular text field
+        fields[fieldName] = partBody.toString('utf-8');
+      }
+    }
+
+    return { fields, file };
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Validates POST /analyze request input
  */

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Report } from '../../types/index';
 import { Badge } from './Badge';
+import { getEvidenceUrl } from '../../services/api';
 
 interface IncidentDetailsPanelProps {
   report: Report | null;
@@ -15,6 +16,7 @@ export const IncidentDetailsPanel: React.FC<IncidentDetailsPanelProps> = ({
 }) => {
   const [localStatus, setLocalStatus] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [isLoadingEvidence, setIsLoadingEvidence] = useState(false);
 
   // Sync local status when report changes
   React.useEffect(() => {
@@ -44,6 +46,18 @@ export const IncidentDetailsPanel: React.FC<IncidentDetailsPanelProps> = ({
       // Revert to current status on failure
       setLocalStatus(report.status);
       setError(err.message || 'Failed to update status');
+    }
+  };
+
+  const handleViewEvidence = async () => {
+    setIsLoadingEvidence(true);
+    try {
+      const result = await getEvidenceUrl(report.reportId);
+      window.open(result.presignedUrl, '_blank', 'noopener,noreferrer');
+    } catch (err: any) {
+      setError(err.message || 'Unable to load evidence.');
+    } finally {
+      setIsLoadingEvidence(false);
     }
   };
 
@@ -81,6 +95,28 @@ export const IncidentDetailsPanel: React.FC<IncidentDetailsPanelProps> = ({
           <p className="details-value">{createdDate}</p>
         </div>
       </div>
+
+      {report.evidence && (
+        <div className="details-section">
+          <h3>Evidence</h3>
+          <div className="details-row">
+            <span className="details-label">📎 Evidence attached</span>
+            <p className="details-value" style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+              {report.evidence.contentType.split('/')[1].toUpperCase()} •{' '}
+              {(report.evidence.size / 1024).toFixed(1)} KB
+            </p>
+          </div>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleViewEvidence}
+            disabled={isLoadingEvidence}
+            style={{ width: '100%', marginTop: '0.5rem' }}
+          >
+            {isLoadingEvidence ? 'Loading...' : 'View Evidence'}
+          </button>
+        </div>
+      )}
 
       <div className="details-section">
         <h3>AI Assessment</h3>

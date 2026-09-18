@@ -9,12 +9,14 @@ export class ReportService {
   constructor(private readonly repository: ReportRepository) {}
 
   /**
-   * Creates and persists a new incident report
+   * Creates and persists a new incident report.
+   * Accepts an optional preGeneratedId when the caller has already reserved
+   * an ID (e.g., to name an S3 evidence object before committing to DynamoDB).
    */
-  async createReport(input: CreateReportInput): Promise<Report> {
+  async createReport(input: CreateReportInput, preGeneratedId?: string): Promise<Report> {
     const now = new Date().toISOString();
     const report: Report = {
-      reportId: generateReportId(),
+      reportId: preGeneratedId || generateReportId(),
       description: input.description,
       location: input.location,
       category: input.category,
@@ -25,6 +27,7 @@ export class ReportService {
       status: 'OPEN',
       createdAt: now,
       updatedAt: now,
+      evidence: input.evidence,
     };
 
     return this.repository.create(report);
