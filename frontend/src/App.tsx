@@ -11,6 +11,9 @@ import './styles/variables.css';
 import './styles/global.css';
 import './styles/components.css';
 import './styles/pages.css';
+import './styles/admin.css';
+
+import { AdminDashboardPage } from './pages/AdminDashboardPage';
 
 export const App: React.FC = () => {
   return (
@@ -22,6 +25,7 @@ export const App: React.FC = () => {
             <Route path="/" element={<ReportIssuePage />} />
             <Route path="/analyze" element={<AnalysisPage />} />
             <Route path="/confirmation" element={<ConfirmationPage />} />
+            <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const Footer: React.FC = () => {
   return (
@@ -15,7 +16,7 @@ export const Footer: React.FC = () => {
           <span>•</span>
           <span>Student Hackathon Project</span>
           <span>•</span>
-          <span>Phase 2: Local Student MVP</span>
+          <Link to="/admin" style={{ color: 'inherit', textDecoration: 'underline' }}>Admin Portal</Link>
         </div>
       </div>
     </footer>

@@ -16,7 +16,8 @@
 | **Phase 4 (Pt. 4)** | Full Frontend ↔ Backend Local HTTP Integration | **COMPLETED (Part 4 - Local)** |
 | **Phase 5**| DynamoDB Persistence Integration | **COMPLETED (Part 5 - AWS)** |
 | **Phase 6**| Amazon Bedrock AI Integration | **COMPLETED (Part 6 - AWS)** |
-| **Phase 7–9**| Admin Dashboard, Security & Optional S3 | *PLANNED* |
+| **Phase 7**| Admin Incident Dashboard | **COMPLETED (Part 7 - Local)** |
+| **Phase 8–9**| Security & Optional S3 | *PLANNED* |
 | **Phase 10–14**| AWS Deployment, E2E Testing & Demo Video | *PLANNED* |
 
 > **Current Implementation Note**:  
@@ -26,6 +27,7 @@
 > - **PART 4**: Local frontend-backend integration complete. React now communicates via live HTTP requests with the Lambda-compatible backend.  
 > - **PART 5**: Real DynamoDB Persistence connected to local backend using AWS SDK.
 > - **PART 6**: Amazon Bedrock AI Integration implemented. (Currently running in Mock fallback mode pending AWS account verification for live access).
+> - **PART 7**: Admin Incident Dashboard added to the frontend. (Authentication is NOT implemented yet; this is a hackathon prototype).
 >
 > **Current Local Architecture**:  
 > `React SPA` $\rightarrow$ `Local HTTP API` $\rightarrow$ `Lambda Handlers` $\rightarrow$ `MockAnalysisService / InMemoryReportRepository`  

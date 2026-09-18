@@ -1,0 +1,324 @@
+/* Admin Dashboard Styles */
+
+.admin-dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: var(--font-family, system-ui, sans-serif);
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.admin-header h1 {
+  margin: 0;
+  font-size: 1.75rem;
+  color: var(--text-color, #1a202c);
+}
+
+.admin-header p {
+  margin: 0.5rem 0 0 0;
+  color: var(--text-muted, #718096);
+}
+
+.admin-header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-secondary {
+  background-color: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  color: var(--text-color, #1a202c);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-color, #f7fafc);
+}
+
+/* Stat Cards */
+.stat-cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.stat-card-title {
+  font-size: 0.875rem;
+  color: var(--text-muted, #718096);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.stat-card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-color, #1a202c);
+}
+
+.stat-card.critical .stat-card-value {
+  color: var(--error-color, #e53e3e);
+}
+
+.stat-card.high .stat-card-value {
+  color: var(--warning-color, #dd6b20);
+}
+
+/* Filter Bar */
+.filter-bar {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filter-input, .filter-select {
+  padding: 0.5rem;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.filter-input {
+  flex-grow: 1;
+  min-width: 200px;
+}
+
+/* Main Layout */
+.admin-content {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* Incident Table */
+.incident-list-container {
+  flex-grow: 1;
+  background-color: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.incident-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.incident-table th, .incident-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+}
+
+.incident-table th {
+  background-color: var(--bg-color, #f7fafc);
+  font-weight: 600;
+  color: var(--text-muted, #718096);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+}
+
+.incident-table tr {
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.incident-table tr:hover, .incident-table tr.selected {
+  background-color: var(--bg-color, #f7fafc);
+}
+
+.incident-table td {
+  font-size: 0.95rem;
+}
+
+.report-id-cell {
+  font-family: monospace;
+  font-weight: 600;
+  color: var(--primary-color, #3182ce);
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.badge-priority-LOW { background-color: #ebf8ff; color: #2b6cb0; }
+.badge-priority-MEDIUM { background-color: #fefcbf; color: #b7791f; }
+.badge-priority-HIGH { background-color: #feebc8; color: #c05621; }
+.badge-priority-CRITICAL { background-color: #fed7d7; color: #c53030; }
+
+.badge-status-OPEN { background-color: #e2e8f0; color: #4a5568; }
+.badge-status-IN_PROGRESS { background-color: #ebf8ff; color: #3182ce; }
+.badge-status-RESOLVED { background-color: #c6f6d5; color: #2f855a; }
+
+/* Details Panel */
+.incident-details-panel {
+  width: 400px;
+  flex-shrink: 0;
+  background-color: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 2rem;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+.details-header {
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  padding-bottom: 1rem;
+}
+
+.details-header h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.details-section {
+  margin-bottom: 1.5rem;
+}
+
+.details-section h3 {
+  font-size: 0.875rem;
+  color: var(--text-muted, #718096);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.5rem 0;
+  border-bottom: 1px solid var(--border-color, #e2e8f0);
+  padding-bottom: 0.25rem;
+}
+
+.details-row {
+  margin-bottom: 0.75rem;
+}
+
+.details-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--text-muted, #718096);
+  display: block;
+}
+
+.details-value {
+  font-size: 0.95rem;
+  margin-top: 0.25rem;
+  line-height: 1.4;
+}
+
+.status-management {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color, #e2e8f0);
+}
+
+.status-management select {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+/* Empty & Loading States */
+.empty-state {
+  padding: 4rem 2rem;
+  text-align: center;
+  color: var(--text-muted, #718096);
+}
+
+.empty-state h3 {
+  color: var(--text-color, #1a202c);
+  margin-bottom: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .admin-content {
+    flex-direction: column;
+  }
+  
+  .incident-details-panel {
+    width: 100%;
+    position: static;
+    max-height: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .incident-table thead {
+    display: none;
+  }
+  
+  .incident-table, .incident-table tbody, .incident-table tr, .incident-table td {
+    display: block;
+    width: 100%;
+  }
+  
+  .incident-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid var(--border-color, #e2e8f0);
+    border-radius: 8px;
+    padding: 1rem;
+  }
+  
+  .incident-table td {
+    border: none;
+    padding: 0.25rem 0;
+    text-align: left;
+  }
+  
+  .incident-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    display: inline-block;
+    width: 120px;
+    color: var(--text-muted, #718096);
+  }
+  
+  .report-id-cell {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+  }
+  
+  .report-id-cell::before {
+    display: none;
+  }
+}

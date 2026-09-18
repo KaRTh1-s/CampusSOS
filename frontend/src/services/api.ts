@@ -124,3 +124,43 @@ export async function createReport(
     updatedAt: response.updatedAt,
   };
 }
+
+/**
+ * Retrieves a paginated/filtered list of reports from the backend.
+ * Calls GET /reports
+ */
+export async function getReports(params?: { status?: string; priority?: string; category?: string }): Promise<{ reports: Report[]; count: number }> {
+  let queryStr = '';
+  if (params) {
+    const searchParams = new URLSearchParams();
+    if (params.status) searchParams.append('status', params.status);
+    if (params.priority) searchParams.append('priority', params.priority);
+    if (params.category) searchParams.append('category', params.category);
+    queryStr = searchParams.toString() ? `?${searchParams.toString()}` : '';
+  }
+
+  return request<{ reports: Report[]; count: number }>(`/reports${queryStr}`, {
+    method: 'GET',
+  });
+}
+
+/**
+ * Retrieves a single report by ID.
+ * Calls GET /reports/{id}
+ */
+export async function getReport(id: string): Promise<Report> {
+  return request<Report>(`/reports/${id}`, {
+    method: 'GET',
+  });
+}
+
+/**
+ * Updates the status of an existing report.
+ * Calls PATCH /reports/{id}/status
+ */
+export async function updateReportStatus(id: string, status: 'OPEN' | 'IN_PROGRESS' | 'RESOLVED'): Promise<{ reportId: string; status: string; updatedAt: string }> {
+  return request<{ reportId: string; status: string; updatedAt: string }>(`/reports/${id}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ status }),
+  });
+}

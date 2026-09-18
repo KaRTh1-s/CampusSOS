@@ -15,7 +15,7 @@
 | **Phase 4** | **Backend API & Local Integration** | **COMPLETED (Part 3 & Part 4)** | Serverless handlers, in-memory repository, validation, full local HTTP integration with React frontend via live fetch requests. |
 | **Phase 5** | **DynamoDB Persistence Integration** | **COMPLETED (Part 5)** | Connect `createReport`, `listReports`, and `updateReportStatus` handlers to DynamoDB with on-demand capacity and status-createdAt index. |
 | **Phase 6** | **Amazon Bedrock AI Integration** | **COMPLETED (Part 6)** | Real-time Bedrock invocation with Anthropic Claude in `ap-south-1`. System prompt engineering for classification, priority, safety actions, and strict JSON output. Currently defaulting to Mock fallback pending AWS account verification. |
-| **Phase 7** | **Admin Incident Dashboard** | *PLANNED* | Admin UI with live metrics (Total, Open, In Progress, Resolved), incident search, multi-criteria filtering, and one-click status transitions. |
+| **Phase 7** | **Admin Incident Dashboard** | **COMPLETED (Part 7)** | Admin UI with live metrics (Total, Open, In Progress, Resolved), incident search, multi-criteria filtering, and one-click status transitions. Authentication is NOT implemented yet. |
 | **Phase 8** | **Production Security & Validation** | *PLANNED* | Strict CORS setup, credential exposure audit, least-privilege IAM policy validation, rate limiting considerations, and payload size guards. |
 | **Phase 9** | **Optional S3 Evidence Upload** | *PLANNED* | Pre-signed URL upload flow for student photo attachments stored in private Amazon S3 bucket. |
 | **Phase 10** | **AWS Cloud Deployment** | *PLANNED* | Deploy backend via CloudFormation / SAM / CDK and host frontend via AWS Amplify Hosting in `ap-south-1`. |
