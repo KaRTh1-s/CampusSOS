@@ -9,10 +9,10 @@
 
 | Phase | Description | Status | Deliverables |
 |---|---|---|---|
-| **Phase 1** | **Project Foundation & Architecture** | **COMPLETED** | Git repo init, strict `.gitignore`, root package.json, complete architectural specs, API contracts, DB schemas, UI plan, and testing strategy. Zero AWS cost incurred. |
-| **Phase 2** | **Frontend Shell & UI Design System** | **NEXT (Part 2)** | Vite + React + TypeScript setup, clean CSS design tokens, accessible student submission form, AI analysis cards, and layout responsive across devices. |
-| **Phase 3** | **Student Reporting Workflow (Mocked AI)** | *PLANNED* | Wire the end-to-end student flow using deterministic mock AI responses to validate UX, state transitions, and confirmation display before cloud deployment. |
-| **Phase 4** | **Backend API & Lambda Scaffolding** | *PLANNED* | Serverless handlers for `/analyze` and `/reports` with robust input validation, error handling middleware, and standard error response schemas. |
+| **Phase 1** | **Project Foundation & Architecture** | **COMPLETED (Part 1)** | Git repo init, strict `.gitignore`, root package.json, complete architectural specs, API contracts, DB schemas, UI plan, and testing strategy. Zero AWS cost incurred. |
+| **Phase 2** | **Frontend Shell & UI Design System** | **COMPLETED (Part 2)** | Vite + React + TypeScript setup, clean CSS design tokens, accessible student submission form, AI analysis cards, and layout responsive across devices. |
+| **Phase 3** | **Student Reporting Workflow (Mocked AI)** | **COMPLETED (Part 2)** | End-to-end student flow using deterministic mock AI responses (`mockAnalysisService`), safe `localStorage` persistence, error boundaries, and confirmation view. |
+| **Phase 4** | **Backend API & Lambda Scaffolding** | **NEXT (Part 3)** | Serverless handlers for `/analyze` and `/reports` with robust input validation, error handling middleware, and standard error response schemas. |
 | **Phase 5** | **DynamoDB Persistence Integration** | *PLANNED* | Connect `createReport`, `listReports`, and `updateReportStatus` handlers to DynamoDB with on-demand capacity and status-createdAt index. |
 | **Phase 6** | **Amazon Bedrock AI Integration** | *PLANNED* | Real-time Bedrock invocation with Amazon Nova / Titan in `ap-south-1`. System prompt engineering for classification, priority, safety actions, and strict JSON output. |
 | **Phase 7** | **Admin Incident Dashboard** | *PLANNED* | Admin UI with live metrics (Total, Open, In Progress, Resolved), incident search, multi-criteria filtering, and one-click status transitions. |

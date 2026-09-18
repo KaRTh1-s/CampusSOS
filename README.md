@@ -10,12 +10,16 @@
 | Phase | Milestone | Status |
 |---|---|---|
 | **Phase 1** | Foundation, Architecture & Technical Specs | **COMPLETED (Part 1)** |
-| **Phase 2–3**| Frontend Shell & Mocked Student Workflow | *PLANNED* |
+| **Phase 2** | Frontend Shell & Complete Student MVP UI | **COMPLETED (Part 2 - Local)** |
+| **Phase 3** | Student Reporting Workflow Integration | **COMPLETED (Part 2 - Local Mock)** |
 | **Phase 4–6**| Backend API, DynamoDB & Bedrock Integration | *PLANNED* |
 | **Phase 7–9**| Admin Dashboard, Security & Optional S3 | *PLANNED* |
 | **Phase 10–14**| AWS Deployment, E2E Testing & Demo Video | *PLANNED* |
 
-*Note: In accordance with Part 1 hackathon guidelines, no AWS cloud resources have been deployed yet. All architectures and schemas are documented and ready for iterative implementation.*
+> **Current Implementation Note**:  
+> **PART 1**: Foundation complete.  
+> **PART 2**: Frontend MVP implemented locally.  
+> The AI analysis is currently mocked locally and will be connected to Amazon Bedrock in a later phase. No AWS cloud resources have been deployed yet.
 
 ---
 
@@ -78,11 +82,11 @@ The student reviews the AI analysis and submits the report with a single tap, ge
 
 | Feature | Description | Implementation Status |
 |---|---|---|
-| **Natural Language Issue Submission** | Free-form text input with length validation and location tagging. | *Planned (Phase 2–3)* |
-| **AI Triage & Classification** | Categorization, priority assignment, and summary via Amazon Bedrock. | *Planned (Phase 6)* |
-| **Safety Guidance Callout** | Immediate life-safety actions generated to prevent hazardous DIY interventions. | *Planned (Phase 3 & 6)* |
-| **Unique Incident ID Tracking** | Collision-resistant UUID tracking for each submitted report. | *Planned (Phase 4–5)* |
-| **Persistent Data Storage** | Serverless DynamoDB storage with fast lookups. | *Planned (Phase 5)* |
+| **Natural Language Issue Submission** | Free-form text input with length validation and location tagging. | **Implemented (Local MVP)** |
+| **AI Triage & Classification** | Categorization, priority assignment, and summary via Amazon Bedrock. | *Mocked Locally (Phase 2); Real Bedrock Planned (Phase 6)* |
+| **Safety Guidance Callout** | Immediate life-safety actions generated to prevent hazardous DIY interventions. | **Implemented (Local MVP)** |
+| **Unique Incident ID Tracking** | Collision-resistant format (`CS-2026-XXXX`) with clipboard copy. | **Implemented (Local MVP)** |
+| **Persistent Data Storage** | Safe local persistence with DynamoDB planned for Phase 5. | **Implemented Locally (`localStorage`); DynamoDB Planned (Phase 5)** |
 | **Admin Incident Management** | Real-time dashboard with status toggles (`OPEN` / `IN_PROGRESS` / `RESOLVED`). | *Planned (Phase 7)* |
 | **Evidence / Photo Upload** | Direct-to-S3 pre-signed upload for photo evidence. | *Planned (Phase 9 - Future)* |
 

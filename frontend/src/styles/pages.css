@@ -1,0 +1,400 @@
+/* ==========================================================================
+   PAGE LAYOUTS & GRIDS
+   ========================================================================== */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2.5rem 1.5rem 4rem;
+}
+
+.page-container {
+  width: 100%;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   PAGE: REPORT ISSUE (LANDING)
+   ========================================================================== */
+.hero-section {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  color: var(--brand-accent);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 1.25rem;
+}
+
+.hero-title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.hero-subtitle {
+  font-size: 1.0625rem;
+  color: var(--text-secondary);
+  max-width: 580px;
+  margin: 0 auto 1.5rem;
+  line-height: 1.6;
+}
+
+.disclaimer-box {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 2rem;
+}
+
+.disclaimer-icon {
+  color: var(--warning);
+  flex-shrink: 0;
+}
+
+.quick-examples {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.quick-examples-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+.quick-examples-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.example-chip {
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-full);
+  transition: var(--transition-fast);
+  text-align: left;
+}
+
+.example-chip:hover {
+  border-color: var(--border-focus);
+  color: var(--text-primary);
+  background-color: var(--bg-surface-hover);
+}
+
+/* ==========================================================================
+   PAGE: ANALYSIS RESULT
+   ========================================================================== */
+.analysis-header {
+  margin-bottom: 1.75rem;
+}
+
+.analysis-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.analysis-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.analysis-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.analysis-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.analysis-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.meta-item {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+}
+
+.meta-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.25rem;
+}
+
+.meta-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.analysis-summary-block {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+}
+
+.analysis-summary-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.analysis-summary-text {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.original-statement-block {
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border-subtle);
+}
+
+.original-statement-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.35rem;
+}
+
+.original-statement-text {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.analysis-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* ==========================================================================
+   PAGE: CONFIRMATION
+   ========================================================================== */
+.confirmation-card {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.success-icon-wrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--success-bg);
+  border: 2px solid var(--success);
+  color: var(--success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.2);
+}
+
+.confirmation-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.confirmation-subtitle {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  max-width: 480px;
+  margin: 0 auto 2rem;
+}
+
+.report-id-card {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  max-width: 440px;
+  margin: 0 auto 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.report-id-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.report-id-value-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.report-id-code {
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--brand-accent);
+}
+
+.copy-btn {
+  background-color: var(--bg-surface-elevated);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: var(--transition-fast);
+}
+
+.copy-btn:hover {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-primary);
+}
+
+.copy-btn.copied {
+  background-color: var(--success-bg);
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.confirmation-details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin: 0 auto 2rem;
+  max-width: 520px;
+}
+
+.conf-mini-card {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.conf-mini-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.conf-mini-val {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.confirmation-note {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1rem;
+  margin: 0 auto 2rem;
+  max-width: 520px;
+  line-height: 1.5;
+}
+
+.confirmation-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+@media (max-width: 640px) {
+  .hero-title {
+    font-size: 1.75rem;
+  }
+
+  .analysis-meta-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .confirmation-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-actions {
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+  }
+
+  .analysis-actions .btn {
+    width: 100%;
+  }
+
+  .confirmation-actions {
+    flex-direction: column;
+  }
+
+  .header-actions .emergency-pill span {
+    display: none;
+  }
+}
