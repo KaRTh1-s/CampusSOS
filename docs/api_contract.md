@@ -1,8 +1,8 @@
 # CampusSOS API Contract Specification
 
 > **Base URL**: `/api` (e.g. `https://api.campussos.internal/api` or `http://localhost:3001/api`)  
-> **Content-Type**: `application/json`  
-> **Status**: Specification (Part 1 Design)
+> **Content-Type**: `application/json` (unless `multipart/form-data` is specified)
+> **Status**: Final Specification (Hackathon Submission)
 
 ---
 
@@ -66,14 +66,17 @@ Analyzes a student's natural language issue description using Amazon Bedrock to 
 
 ## 2. POST /reports
 
-Creates and persists a new incident report into DynamoDB after student review.
+Creates and persists a new incident report into DynamoDB after student review. Supports optional image evidence upload.
 
 ### Request
 - **Method**: `POST`
 - **Path**: `/reports`
 - **Headers**:
-  - `Content-Type: application/json`
+  - `Content-Type: multipart/form-data` (If evidence is attached)
+  - `Content-Type: application/json` (If no evidence is attached)
 - **Body**:
+
+If `application/json`:
 ```json
 {
   "description": "There is smoke coming from an electrical panel in our classroom on the 2nd floor of Block B.",
@@ -86,6 +89,16 @@ Creates and persists a new incident report into DynamoDB after student review.
 }
 ```
 
+If `multipart/form-data`:
+- `description` (text)
+- `location` (text)
+- `category` (text)
+- `priority` (text)
+- `summary` (text)
+- `recommendedAction` (text)
+- `department` (text)
+- `evidence` (file: image/jpeg, image/png, image/webp - Max 5MB)
+
 ### Success Response
 - **Status**: `201 Created`
 - **Body**:
@@ -93,10 +106,16 @@ Creates and persists a new incident report into DynamoDB after student review.
 {
   "success": true,
   "data": {
-    "reportId": "rep-7f8a92b1-4c12-48df-9e23-8bc101a4df02",
+    "reportId": "CS-2026-ABCD",
     "status": "OPEN",
     "createdAt": "2026-09-18T11:30:00.000Z",
-    "message": "Report created successfully"
+    "updatedAt": "2026-09-18T11:30:00.000Z",
+    "evidence": {
+      "objectKey": "evidence/CS-2026-ABCD/uuid.jpg",
+      "contentType": "image/jpeg",
+      "size": 1048576,
+      "uploadedAt": "2026-09-18T11:30:00.000Z"
+    }
   }
 }
 ```
@@ -209,7 +228,34 @@ Updates the operational status of an incident report (e.g. from `OPEN` to `IN_PR
 
 ---
 
-## 6. Standard Error Format
+## 6. GET /reports/{id}/evidence
+
+Retrieves a short-lived presigned S3 URL to view the evidence attached to a report.
+
+### Request
+- **Method**: `GET`
+- **Path**: `/reports/{id}/evidence`
+- **Parameters**: `id` (String: report identifier)
+
+### Success Response
+- **Status**: `200 OK`
+- **Body**:
+```json
+{
+  "success": true,
+  "data": {
+    "presignedUrl": "https://campussos-evidence-ap-south-1.s3.ap-south-1.amazonaws.com/evidence/CS-2026-ABCD/uuid.jpg?X-Amz-Algorithm=...",
+    "expiresIn": 300,
+    "contentType": "image/jpeg",
+    "size": 1048576,
+    "uploadedAt": "2026-09-18T11:30:00.000Z"
+  }
+}
+```
+
+---
+
+## 7. Standard Error Format
 
 All error responses across all endpoints adhere to this standard structure:
 

@@ -1,7 +1,7 @@
 # CampusSOS Technical Architecture
 
-> **Document Status**: Architecture Specification (PART 1 - Foundation & Planning)  
-> **Deployment Status**: Planned (No cloud resources deployed during Part 1)  
+> **Document Status**: Final Architecture Specification (Hackathon Submission)
+> **Deployment Status**: Backend API running locally with live DynamoDB and S3. Bedrock fallback mode active.
 > **Target Region**: Asia Pacific (Mumbai) - `ap-south-1`
 
 ---
@@ -18,44 +18,51 @@ CampusSOS solves this by allowing students to describe issues in plain, natural 
 
 ```mermaid
 flowchart TD
-    subgraph Client["Client Layer (Student & Admin Browsers)"]
-        UI["React 18 + TypeScript (Vite Single Page App)"]
+    subgraph Client["Client Layer"]
+        Student["Student Browser"]
+        Admin["Admin Browser"]
     end
 
-    subgraph Hosting["AWS Hosting"]
-        Amplify["AWS Amplify Hosting (Global CDN / S3)"]
+    subgraph APILayer["Local Backend API"]
+        LocalServer["Local Node.js HTTP Server\n(Simulates API Gateway)"]
     end
 
-    subgraph APILayer["API & Edge Gateway"]
-        APIGW["Amazon API Gateway (REST API / CORS)"]
+    subgraph ServiceLayer["Service Layer & Fallbacks"]
+        AnalysisSvc["AnalysisService"]
+        MockBedrock["MockAnalysisService\n(Active Fallback)"]
+        RealBedrock["BedrockAnalysisService\n(Implemented, Pending AWS Access)"]
+        ReportSvc["ReportService"]
+        EvidenceSvc["S3EvidenceService"]
     end
 
-    subgraph Compute["Serverless Backend"]
-        L_Analyze["AWS Lambda: analyzeIssue"]
-        L_Reports["AWS Lambda: manageReports"]
+    subgraph Database["Data Persistence (Live AWS)"]
+        DDB[("Amazon DynamoDB\nCampusSOS-Reports")]
     end
 
-    subgraph AI["Generative AI Layer"]
-        Bedrock["Amazon Bedrock (Amazon Nova / Titan / Claude)"]
+    subgraph Storage["Storage (Live AWS)"]
+        S3[("Amazon S3\ncampussos-evidence-ap-south-1\n(Private Block Public Access)")]
     end
 
-    subgraph Database["Data Persistence"]
-        DDB[("Amazon DynamoDB: CampusSOS-Reports\n(On-Demand Pay-Per-Request)")]
-    end
+    Student -->|HTTP Request| LocalServer
+    Admin -->|HTTP Request| LocalServer
 
-    subgraph FutureS3["Optional Future Storage (Phase 9)"]
-        S3[("Amazon S3: Incident Evidence Attachments")]
-    end
+    LocalServer -->|POST /analyze| AnalysisSvc
+    AnalysisSvc -.-> RealBedrock
+    AnalysisSvc -->|Fallback| MockBedrock
 
-    UI -->|Static Asset Fetch| Amplify
-    UI -->|HTTPS REST Calls| APIGW
-    APIGW -->|POST /analyze| L_Analyze
-    APIGW -->|POST, GET, PATCH /reports| L_Reports
+    LocalServer -->|POST /reports\n(Multipart)| ReportSvc
+    LocalServer -->|POST /reports\n(Multipart)| EvidenceSvc
 
-    L_Analyze -->|Converse / InvokeModel| Bedrock
-    L_Reports -->|PutItem, Query, Scan, UpdateItem| DDB
-    L_Reports -.->|Presigned URLs (Future)| S3
+    ReportSvc -->|PutItem, Query, UpdateItem| DDB
+    EvidenceSvc -->|PutObject| S3
+    
+    LocalServer -->|GET /reports/{id}/evidence| EvidenceSvc
+    EvidenceSvc -->|Generate Presigned URL| S3
 ```
+
+### Abstraction Rationale
+The `AnalysisService` abstraction is critical for development reliability. Because live Amazon Bedrock invocation is currently restricted pending AWS account verification, the application cleanly falls back to `MockAnalysisService`. This guarantees that the core product flow remains functional and testable without hard-blocking the frontend or database development on third-party API approval.
+
 
 ---
 
@@ -84,22 +91,19 @@ flowchart TD
 ```
 Frontend (React 18 + Vite SPA)
        |
-       | [Live HTTP Requests - Part 4 Integrated]
+       | [Live HTTP Requests]
        v
-Local HTTP Server (localDevServer.ts)  --> [Future Phase 10: Amazon API Gateway]
+Local HTTP Server (localDevServer.ts)
        |
-AWS Lambda Handlers (analyze.ts, createReport.ts, listReports.ts, getReport.ts, updateReportStatus.ts)
+AWS Lambda Handlers (analyze.ts, createReport.ts, listReports.ts, getReport.ts, updateReportStatus.ts, getEvidenceUrl.ts)
        |
-       v
 Service Layer
  ├── AnalysisService
- │     ├── MockAnalysisService       <-- [Local Dev Implementation - Part 4]
- │     └── BedrockAnalysisService    <-- [Current AWS Implementation - Part 6]
- └── ReportService
-       ↓
-  ReportRepository
-       ├── InMemoryReportRepository  <-- [Local Dev Implementation - Part 4]
-       └── DynamoDBReportRepository  <-- [Current AWS Implementation - Part 5]
+ │     ├── MockAnalysisService       <-- [Active Fallback]
+ │     └── BedrockAnalysisService    <-- [Implemented, Pending AWS Access]
+ ├── ReportService
+ │     └── DynamoDBReportRepository  <-- [Live AWS Integration]
+ └── S3EvidenceService               <-- [Live AWS Integration]
 ```
 
 ### Key Modules Implemented (Part 3):
@@ -122,11 +126,12 @@ All endpoints communicate via standard HTTPS JSON payloads through Amazon API Ga
 
 | Method | Endpoint | Description | Auth / Access |
 |---|---|---|---|
-| `POST` | `/analyze` | Sends issue text to Bedrock AI; returns category, priority, summary, and action | Public (Student) |
-| `POST` | `/reports` | Persists confirmed report into DynamoDB; returns generated `reportId` | Public (Student) |
+| `POST` | `/analyze` | Sends issue text to Bedrock AI (or Mock Fallback); returns category, priority, summary, and action | Public (Student) |
+| `POST` | `/reports` | Persists confirmed report into DynamoDB. Parses multipart/form-data for optional evidence upload to S3. | Public (Student) |
 | `GET` | `/reports` | Lists submitted reports with optional `status` filter | Admin |
 | `GET` | `/reports/{id}` | Retrieves full incident record by `reportId` | Admin / Student |
 | `PATCH` | `/reports/{id}/status` | Updates incident status (`OPEN`, `IN_PROGRESS`, `RESOLVED`) | Admin |
+| `GET` | `/reports/{id}/evidence`| Retrieves a short-lived presigned S3 GET URL for viewing evidence | Admin |
 
 *(See [api_contract.md](file:///d:/CampusSOS/docs/api_contract.md) for full schema specifications).*
 
@@ -188,13 +193,12 @@ Amazon Bedrock is instructed to respond strictly in valid JSON conforming to:
 
 ---
 
-## 9. Future S3 Architecture (Phase 9 - Optional)
+## 9. S3 Evidence Storage (Private)
 
-*Not implemented in Part 1.*  
-When implemented in Phase 9:
-- S3 Bucket: `campussos-evidence-{accountId}-ap-south-1`
-- Bucket Configuration: Block Public Access enabled; private objects only.
-- Upload Protocol: Lambda generates a pre-signed S3 `PUT` URL with a 5-minute expiry. The client uploads the image directly to S3 without passing binary streams through Lambda, saving compute memory and execution cost.
+- **S3 Bucket**: `campussos-evidence-{accountId}-ap-south-1`
+- **Bucket Configuration**: Block Public Access fully enabled. Objects are completely private.
+- **Upload Protocol**: The frontend uploads via `multipart/form-data` to the backend. The backend strictly validates magic-bytes (JPEG, PNG, WebP) and size (5MB max) before streaming to S3.
+- **Retrieval Protocol**: Admin Dashboard fetches a short-lived (5-minute) pre-signed S3 `GET` URL to render the image. No permanent public links exist.
 
 ---
 
