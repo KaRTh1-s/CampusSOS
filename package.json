@@ -1,0 +1,29 @@
+{
+  "name": "campussos",
+  "version": "0.1.0",
+  "description": "AI-Powered Campus Safety and Support Reporting Platform",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "infrastructure"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "keywords": [
+    "campus-safety",
+    "incident-reporting",
+    "aws",
+    "amazon-bedrock",
+    "dynamodb",
+    "serverless",
+    "wemakedevs",
+    "hackathon"
+  ],
+  "author": "CampusSOS Team",
+  "license": "MIT"
+}
