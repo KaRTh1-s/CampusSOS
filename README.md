@@ -119,4 +119,4 @@ Comprehensive testing suites are included in the backend:
 Built for **WeMakeDevs × AWS First Commit (Bharat Builds Tour, September 17–20, 2026)**.
 
 ## Team
-*[Team details to be filled in]*
+*scoop*
